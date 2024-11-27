@@ -2,6 +2,7 @@ import globals from 'globals';
 import pluginJs from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import prettierPlugin from 'eslint-plugin-prettier';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -12,9 +13,13 @@ export default [
         globals: globals.node, // Define globals for Node.js
       },
       plugins: [
+        {prettier: prettierPlugin},
         // Add necessary plugins
         'prettier', // If you're using Prettier plugin
       ],
+        
+    
+       
       extends: [
         // ESLint recommended rules
         pluginJs.configs.recommended, 
@@ -28,6 +33,7 @@ export default [
         'no-unused-vars': 'error',
         'prefer-const': ['error', { ignoreReadBeforeAssign: true }],
         'no-console': 'warn', // Warn on console usage
+        'prettier/prettier': 'error',
       },
       ignores: ['node_modules', 'dist'], // Directories to ignore
     },

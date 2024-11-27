@@ -8,3 +8,8 @@ export default {
   port: process.env.PORT,
   database_url: process.env.DATABASE_URL,
 };
+
+require('dotenv').config();
+console.log(process.env.PORT);
+
+

@@ -6,3 +6,11 @@ dist/
 
 # Environment variables
 .env
+
+# git add .gitignore
+# git commit -m "Add .gitignore"
+
+
+# Remove any already-tracked node_modules/, dist/, or .env files if they exist:
+# git rm -r --cached node_modules/ dist/ .env
+# git commit -m "Remove ignored files from repository"
