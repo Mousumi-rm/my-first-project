@@ -1,2 +1,4 @@
-node_modiles
-dist
+touch .eslintignore
+node_modiles/
+dist/
+build/
