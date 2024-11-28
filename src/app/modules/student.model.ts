@@ -5,7 +5,12 @@ import {  Guardian, LocalGuardian, Student, UserName } from '../modules/student/
 
 // 2. Create a Schema corresponding to the document interface.
 const userNameSchema =  new Schema<UserName>({
-     firstName:{type:String, required:true},
+     firstName:{
+        type:String,
+         required:[true, 'first name is required'],
+         maxlength: [20,'first name should be at least 20 characters'],
+         trim:true,
+        },
         middleName:{ type:String },
         lastName:{type:String,required:true}
         })

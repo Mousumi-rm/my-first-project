@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { resourceLimits } from 'worker_threads';
 import { StudentService } from './student.service';
 
 // main part for the student controller:
@@ -52,7 +53,11 @@ const getSingleStudent  = async(req:Request,res:Response) =>{
             data:result
         })
     }catch(error){
-        console.log(error)
+       res.status(500).json({
+        success:false,
+        message:"Something went wrong",
+        error:result,
+       })
     }
     
 }
