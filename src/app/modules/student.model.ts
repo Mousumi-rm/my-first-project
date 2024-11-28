@@ -42,16 +42,31 @@ const studentSchema = new Schema<Student>({
         type:userNameSchema,
          required:true,
      },
+     email:{
+        type:String,
+        required:true,
+        unique:true,
+        validate: {
+            validator: (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+            message: '{VALUE} is not a valid email address!',
+        },
+        lowercase: true,
+     },
 
     gender:{
         type:String,
-        enum:["male","female"],
-        required:true,
+        enum:{
+            values:['male','female','other'],
+            message: '{VALUE} is not valid',
+        }
 
+    },
+    bloodGroup:{
+        type:String,
+        enum:["A+" , "A-" , "B+" , "B-" , "AB+" , "AB-" , "O+" , "O-"]
     },
    
     birthDay: { type: String, required: true },
-    email:{  type:String,required:true},
     emergencyContactNo:{type:String, required:true},
     presentAddress:{ type:String,required:true},
     permanentAddress:{  type:String, },
@@ -69,7 +84,6 @@ const studentSchema = new Schema<Student>({
     isActive:{
         type:String,
         enum:['true','block'],
-        required:true,
         }
 
 })
