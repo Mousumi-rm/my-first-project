@@ -8,8 +8,17 @@ const userNameSchema =  new Schema<UserName>({
      firstName:{
         type:String,
          required:[true, 'first name is required'],
-         maxlength: [20,'first name should be at least 20 characters'],
+         maxlength: [20, 'first name should not exceed 20 characters'],
+
          trim:true,
+         validate:{
+            validator: function (value: string) {
+                // Ensure the first letter is capitalized
+                return value.charAt(0) === value.charAt(0).toUpperCase();
+            },
+            message: 'First name should start with an uppercase letter', 
+         }
+
         },
         middleName:{ type:String },
         lastName:{type:String,required:true}
@@ -41,7 +50,7 @@ const studentSchema = new Schema<Student>({
     id:{
         type:String,
         required:true,
-        unique:true,
+       
     },
      name:{
         type:userNameSchema,
@@ -50,7 +59,6 @@ const studentSchema = new Schema<Student>({
      email:{
         type:String,
         required:true,
-        unique:true,
         validate: {
             validator: (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
             message: '{VALUE} is not a valid email address!',
@@ -60,8 +68,8 @@ const studentSchema = new Schema<Student>({
 
     gender:{
         type:String,
-        enum:{
-            values:['male','female','other'],
+        enums:{
+            value:['male','female','other'],
             message: '{VALUE} is not valid',
         }
 
@@ -88,7 +96,9 @@ const studentSchema = new Schema<Student>({
                      
     isActive:{
         type:String,
-        enum:['true','block'],
+        enum: ['true', 'block'],
+       
+    
         }
 
 })

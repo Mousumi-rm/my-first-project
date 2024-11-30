@@ -1,16 +1,13 @@
 import { Request, Response } from 'express';
-import { resourceLimits } from 'worker_threads';
 import { StudentService } from './student.service';
+import { resourceLimits } from 'worker_threads';
 
 // main part for the student controller:
 const  createStudent =async(req:Request, res:Response) => {
     try{
-        //student object from  postman are ditucturaing
-        // const  student = req.body.student;
-        const {student : studentData} = req.body;
-        
+        const {student : studentData} = req.body; 
     // we will call the service function to send the  data.
-    const result = await  StudentService. createStudentInToBD(studentData);
+    const result = await  StudentService.createStudentInToBD(studentData);
 
     // send response
    res.status(200).json({
@@ -20,8 +17,13 @@ const  createStudent =async(req:Request, res:Response) => {
 });
 
     }catch(error){
-        console.log(error);
-    };
+        res.status(500).json({
+            success:false,
+            message:"Something went wrong",
+            error:error,
+        })
+    }
+    
     
 };
 
@@ -56,7 +58,7 @@ const getSingleStudent  = async(req:Request,res:Response) =>{
        res.status(500).json({
         success:false,
         message:"Something went wrong",
-        error:result,
+        error:error,
        })
     }
     
