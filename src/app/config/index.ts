@@ -11,5 +11,3 @@ export default {
 
 require('dotenv').config();
 console.log(process.env.PORT);
-
-

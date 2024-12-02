@@ -1,72 +1,71 @@
 import { Request, Response } from 'express';
 import { StudentService } from './student.service';
-import { resourceLimits } from 'worker_threads';
-
-// main part for the student controller:
-const  createStudent =async(req:Request, res:Response) => {
-    try{
-        const {student : studentData} = req.body; 
-    // we will call the service function to send the  data.
-    const result = await  StudentService.createStudentInToBD(studentData);
-
-    // send response
-   res.status(200).json({
-    success:true,
-    message: "Student created successfully",
-    data: result,
-});
-
-    }catch(error){
-        res.status(500).json({
-            success:false,
-            message:"Something went wrong",
-            error:error,
-        })
-    }
-    
-    
+// import studentValidationSchema from './student.joi.validation'; // Fix typo here
+import studentValidationSchema from './student.zod.validation'
+// import {studentValidationSchema} from './student.zod.validation'
+// 1
+// Main part for the student controller
+const createStudent = async (req: Request, res: Response) => {
+  try {
+    const { student: studentData } = req.body;
+     // Schema validation using zod
+      const zodParsedData = studentValidationSchema.parse(studentData)  
+     // Call the service function to save the data
+      const result = await StudentService.createStudentInToBD(zodParsedData);
+       // Send response
+      res.status(200).json({
+      success: true,
+      message: 'Student created successfully',
+      data: result,
+    });
+    } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+      error: error.message,
+    });
+  }
 };
-
-// second part of the controller for sub root api
-const getAllStudent =async (req:Request,res:Response) => {
-    try{
-    // we will call the service function to send the  data.
-        const result = await StudentService.getAllStudentFromDB();
-        //send the response:
-        res.status(200).json({
-            success:true,
-            message:"All student  retrieve successfully",
-            data:result,
-        }) 
-    }catch(error){
-        console.log(error);
-    }
-}
-
-// code for get a single id from the Db and postman:
-const getSingleStudent  = async(req:Request,res:Response) =>{
-    try{
-        const {studentId} = req.params;
-        const result = await StudentService.getSingleStudentFromDB(studentId);
-       // send the response
-        res.status(200).json({
-            success:true,
-            message:"Single student  retrieve successfully",
-            data:result
-        })
-    }catch(error){
-       res.status(500).json({
-        success:false,
-        message:"Something went wrong",
-        error:error,
-       })
-    }
-    
-}
-
+// 2
+// Second part of the controller for sub-root API
+const getAllStudent = async (req: Request, res: Response) => {
+  try {
+    const result = await StudentService.getAllStudentFromDB();
+    res.status(200).json({
+      success: true,
+      message: 'All students retrieved successfully',
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+      error: error.message,
+    });
+  }
+};
+// 3
+// Code to get a single student by ID
+const getSingleStudent = async (req: Request, res: Response) => {
+  try {
+    const { studentId } = req.params;
+    const result = await StudentService.getSingleStudentFromDB(studentId);
+    res.status(200).json({
+      success: true,
+      message: 'Single student retrieved successfully',
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+      error: error.message,
+    });
+  }
+};
+// 4
 export const StudentController = {
-    createStudent,
-    getAllStudent,
-    getSingleStudent 
+  createStudent,
+  getAllStudent,
+  getSingleStudent,
 };
-
