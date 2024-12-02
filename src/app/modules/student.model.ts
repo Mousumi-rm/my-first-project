@@ -1,13 +1,14 @@
+import { StudentMethods, StudentModel } from './student/student.interface';
 import { Schema, model } from 'mongoose';
 import {
-  Guardian,
-  LocalGuardian,
-  Student,
-  UserName,
+  TGuardian,
+  TLocalGuardian,
+  TStudent,
+  TUserName,
 } from '../modules/student/student.interface';
 
 // 2. Create a Schema corresponding to the document interface.
-const userNameSchema = new Schema<UserName>({
+const userNameSchema = new Schema<TUserName>({
   firstName: {
     type: String,
     required: [true, 'first name is required'],
@@ -26,7 +27,7 @@ const userNameSchema = new Schema<UserName>({
 });
 
 
-const guardianNameSchema = new Schema<Guardian>({
+const guardianNameSchema = new Schema<TGuardian>({
   father: {
     fatherName: { type: String, required: true },
     fatherOccupation: { type: String, required: true },
@@ -41,14 +42,14 @@ const guardianNameSchema = new Schema<Guardian>({
   },
 });
 
-const localGuardianNameSchema = new Schema<LocalGuardian>({
+const localGuardianNameSchema = new Schema<TLocalGuardian>({
   relativeName: { type: String, required: true },
   relationship: { type: String, required: true },
   contactNumber: { type: String, required: true },
   occupation: { type: String },
 });
 
-const studentSchema = new Schema<Student>({
+const studentSchema = new Schema<TStudent, StudentModel,StudentMethods>({
   id: {
     type: String,
     required: true,
@@ -104,5 +105,12 @@ const studentSchema = new Schema<Student>({
 
 // 3. Create a Model.we are changer only the const name(StudentModel)but
 // not change the "Student"cos this "Student" related  database
+studentSchema.methods.isUserExists = async function(id:string){
+  // const existingUser = await Student.findOne({id:id})
+  const existingUser = await Student.findOne({ id });
+   return existingUser 
+}
 
-export const StudentModel = model<Student>('Student', studentSchema);
+
+// there is instance part of the model
+export const Student = model<TStudent, StudentModel>('Student', studentSchema);
